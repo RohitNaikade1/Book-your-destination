@@ -10,10 +10,11 @@ export let reducer=(state=todos,action)=>{
             return newTodos;
         case constants.DELETE_TODO:
             newTodos=[...state];
-            newTodos=newTodos.filter(todo=>todo.id!=action.payload);
+            newTodos=newTodos.filter(todo=>todo.id!==action.payload);
             return newTodos;
         case constants.UPDATE_TODO:
-            return action.payload;     
+            return action.payload;  
+        default:
+            return state;   
     }
-    return state;
 }
