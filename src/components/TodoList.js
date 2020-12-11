@@ -1,54 +1,41 @@
 import React, { useState } from 'react';
 import TodoForm from './TodoForm';
 import Todo from './Todo';
-
+import {useSelector,useDispatch} from 'react-redux';
+import {addTodo,deleteTodo,updateTodo} from './Redux/actions';
 function TodoList() {
-  const [todos, setTodos] = useState([]);
-
-  const addTodo = todo => {
+  let todos=useSelector(state=>state);
+  let dispatch=useDispatch();
+  // console.log(todos)
+  const addTodos = todo => {
     if (!todo.text || /^\s*$/.test(todo.text)) {
       return;
     }
 
-    const newTodos = [todo, ...todos];
-
-    setTodos(newTodos);
-    console.log(...todos);
+    dispatch(addTodo(todo));
   };
 
-  const updateTodo = (todoId, newValue) => {
+  const updateTodos = (todoId, newValue) => {
     if (!newValue.text || /^\s*$/.test(newValue.text)) {
       return;
     }
 
-    setTodos(prev => prev.map(item => (item.id === todoId ? newValue : item)));
+    const newTodos=todos.map(item => (item.id === todoId ? newValue : item));
+    dispatch(updateTodo(newTodos));
   };
 
   const removeTodo = id => {
-    const removedArr = [...todos].filter(todo => todo.id !== id);
-
-    setTodos(removedArr);
-  };
-
-  const completeTodo = id => {
-    let updatedTodos = todos.map(todo => {
-      if (todo.id === id) {
-        todo.isComplete = !todo.isComplete;
-      }
-      return todo;
-    });
-    setTodos(updatedTodos);
+    dispatch(deleteTodo(id));
   };
 
   return (
     <>
-      <h1>What's the Plan for Today?</h1>
-      <TodoForm onSubmit={addTodo} />
+      <h1>Destinations which you want to visit?</h1>
+      <TodoForm onSubmit={addTodos} />
       <Todo
         todos={todos}
-        completeTodo={completeTodo}
         removeTodo={removeTodo}
-        updateTodo={updateTodo}
+        updateTodo={updateTodos}
       />
     </>
   );
